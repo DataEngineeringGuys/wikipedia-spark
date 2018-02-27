@@ -27,4 +27,5 @@ build/
 wikipedia/.idea/
 wikipedia/target/
 wikipedia/project/target/
+wikipedia/project/project/
 wikipedia/src/main/resources/wikipedia/
