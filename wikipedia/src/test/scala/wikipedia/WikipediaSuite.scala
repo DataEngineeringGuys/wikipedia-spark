@@ -102,6 +102,16 @@ class WikipediaSuite extends FunSuite with BeforeAndAfterAll {
     assert(res)
   }
 
+  test("'rankLangs' should work for RDD with more elements") {
+    assert(initializeWikipediaRanking(), " -- did you fill in all the values in WikipediaRanking (conf, sc, wikiRdd)?")
+    import WikipediaRanking._
+    val langs = List("Scala", "Java")
+    val rdd = sc.parallelize(List(WikipediaArticle("1", "Java is great"), WikipediaArticle("2", "Java is OK, but Scala is cooler"), WikipediaArticle("3", "Java is OK again")))
+    val ranked = rankLangs(langs, rdd)
+    val res = ranked.head._1 == "Java"
+    assert(res)
+  }
+
   test("'makeIndex' creates a simple index with two entries") {
     assert(initializeWikipediaRanking(), " -- did you fill in all the values in WikipediaRanking (conf, sc, wikiRdd)?")
     import WikipediaRanking._
