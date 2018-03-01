@@ -3,7 +3,7 @@ package wikipedia
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
-
+import scala.collection.JavaConverters
 import org.apache.spark.rdd.RDD
 
 case class WikipediaArticle(title: String, text: String) {
@@ -44,7 +44,10 @@ object WikipediaRanking {
   /* Compute an inverted index of the set of articles, mapping each language
    * to the Wikipedia pages in which it occurs.
    */
-  def makeIndex(langs: List[String], rdd: RDD[WikipediaArticle]): RDD[(String, Iterable[WikipediaArticle])] = ???
+  def makeIndex(langs: List[String], rdd: RDD[WikipediaArticle]): RDD[(String, Iterable[WikipediaArticle])] = {
+    val results = langs.map(lang => (lang, rdd.filter(item => item.mentionsLanguage(lang)).collect().toSeq))
+    sc.parallelize(results)
+  }
 
   /* (2) Compute the language ranking again, but now using the inverted index. Can you notice
    *     a performance improvement?
