@@ -41,7 +41,7 @@ object WikipediaRanking {
    */
   def rankLangs(langs: List[String], rdd: RDD[WikipediaArticle]): List[(String, Int)] = langs.map(lang => (lang, occurrencesOfLang(lang, rdd))).sortBy({item => item._2}).reverse
 
-  private def findLanguages(langs: List[String], article: WikipediaArticle) = langs.filter(article.mentionsLanguage)
+  private def findLanguages(langs: List[String], article: WikipediaArticle): List[String] = langs.filter(article.mentionsLanguage)
 
   /* Compute an inverted index of the set of articles, mapping each language
    * to the Wikipedia pages in which it occurs.
