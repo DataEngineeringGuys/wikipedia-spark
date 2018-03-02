@@ -64,7 +64,9 @@ object WikipediaRanking {
    *   Note: this operation is long-running. It can potentially run for
    *   several seconds.
    */
-  def rankLangsReduceByKey(langs: List[String], rdd: RDD[WikipediaArticle]): List[(String, Int)] = ???
+  def rankLangsReduceByKey(langs: List[String], rdd: RDD[WikipediaArticle]): List[(String, Int)] = {
+    sc.parallelize(makeIndex(langs, rdd).map(i => (i._1, i._2.size)).collect().toList).reduceByKey((accum, n) => accum + n).collect.toList.sortBy(_._2).reverse
+  }
 
   def main(args: Array[String]) {
 
